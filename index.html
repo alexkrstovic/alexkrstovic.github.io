@@ -3,25 +3,137 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Alexander Krstovic</title>
+    <title>Alexander Krstović — Product Designer</title>
     <link rel="stylesheet" href="style.css" />
     <script defer src="main.js"></script>
   </head>
+
   <body>
-    <header>
-      <h1>Alexander Krstovic</h1>
-      <p>Interaction Design student • UX / Brand / Web</p>
-      <nav>
-        <a href="index.html">Home</a>
-        <a href="visualizations.html">Visualizations</a>
-      </nav>
+    <header class="site-header">
+      <div class="container">
+        <h1>Alexander Krstović</h1>
+        <p class="subtitle">Product Designer • Vancouver, British Columbia</p>
+
+        <nav class="nav">
+          <a href="index.html">Home</a>
+          <a href="visualizations.html">Visualizations</a>
+        </nav>
+
+        <p class="links">
+          <a href="https://www.alexkrs.com" target="_blank" rel="noopener noreferrer">Portfolio</a>
+          <!-- Safer than publishing phone publicly -->
+          <span class="dot">•</span>
+          <span>alexander.krstovic@gmail.com</span>
+        </p>
+      </div>
     </header>
 
-    <main>
-      <section>
-        <h2>About</h2>
-        <p>This is my personal website for Assignment 2 🚀</p>
+    <main class="container">
+      <section class="card">
+        <h2>Skills</h2>
+
+        <h3>Development knowledge</h3>
+        <ul>
+          <li>HTML</li>
+          <li>CSS</li>
+          <li>JavaScript</li>
+          <li>Python</li>
+        </ul>
+
+        <h3>Design knowledge</h3>
+        <ul>
+          <li>UX Design & Research</li>
+          <li>User Research</li>
+          <li>User Testing</li>
+          <li>Design thinking</li>
+          <li>Lean UX</li>
+          <li>Information Architecture</li>
+          <li>UI Design</li>
+          <li>Heuristic Evaluation</li>
+          <li>Typography</li>
+          <li>Color Theory</li>
+          <li>Layout</li>
+          <li>Design Systems</li>
+          <li>Interaction Design & Prototyping</li>
+          <li>Wireframing</li>
+          <li>Lo-fi & Hi-fi Design</li>
+          <li>Rapid Prototyping</li>
+          <li>Micro-interactions</li>
+        </ul>
+      </section>
+
+      <section class="card">
+        <h2>Tools & technologies</h2>
+        <ul>
+          <li>Figma</li>
+          <li>ProtoPie</li>
+          <li>Adobe Creative Suite</li>
+          <li>Webflow</li>
+          <li>Hotjar</li>
+          <li>FullStory</li>
+        </ul>
+      </section>
+
+      <section class="card">
+        <h2>Experience</h2>
+
+        <article class="role">
+          <div class="role-header">
+            <h3>Lead Product Designer — Frogplum Solutions Inc.</h3>
+            <p class="meta">August 2017 – February 2022</p>
+          </div>
+          <ul>
+            <li>Define and drive the design vision and strategy for products.</li>
+            <li>Align design goals with business objectives and user needs.</li>
+            <li>Advocate for user-centered design (UCD) and accessibility best practices.</li>
+            <li>Lead, mentor, and provide feedback to junior and mid-level designers.</li>
+            <li>Conduct design critiques and ensure high-quality design output.</li>
+            <li>Foster a collaborative design culture and best practices.</li>
+            <li>Oversee the end-to-end design process, from research to final implementation.</li>
+            <li>Work with front-end developers to ensure pixel-perfect UI implementation and optimize performance using HTML, CSS, and JavaScript.</li>
+            <li>Create wireframes, prototypes, and high-fidelity UI designs.</li>
+            <li>Maintain and evolve design systems for consistency and scalability.</li>
+            <li>Conduct or oversee user research, usability testing, and A/B testing.</li>
+            <li>Use analytics tools (Hotjar, FullStory, Google Analytics) to inform design decisions.</li>
+            <li>Iterate based on qualitative and quantitative user feedback.</li>
+            <li>Work closely with product managers, engineers, and stakeholders.</li>
+            <li>Ensure smooth developer handoff using tools like Figma Dev Mode.</li>
+            <li>Participate in Agile sprints, standups, and roadmap planning.</li>
+            <li>Balance user needs with technical and business constraints.</li>
+          </ul>
+        </article>
+
+        <article class="role">
+          <div class="role-header">
+            <h3>Graphic Designer — Global Village Vancouver</h3>
+            <p class="meta">August 2014 – December 2017, Vancouver</p>
+          </div>
+          <ul>
+            <li>Ran ads on Facebook for study programs.</li>
+            <li>Designed ad images.</li>
+            <li>Handled social media.</li>
+            <li>Designed social-media images.</li>
+            <li>Created social-media posts.</li>
+            <li>Short video editing for Instagram.</li>
+            <li>Optimized images for social media.</li>
+          </ul>
+        </article>
+      </section>
+
+      <section class="card">
+        <h2>Education</h2>
+        <ul>
+          <li>Bachelor of Science in Interactive Arts & Technology (BSc) (in progress)</li>
+          <li>B.A. English Literature & Arts</li>
+          <li>Google Project Management: Specialization</li>
+        </ul>
       </section>
     </main>
+
+    <footer class="footer">
+      <div class="container">
+        <p>© <span id="year"></span> Alexander Krstović</p>
+      </div>
+    </footer>
   </body>
 </html>
