@@ -55,16 +55,42 @@ window.onload = function () {
 
 
   // -------------------------------
-  // Visualization 2: Creative SVG Art
+  // Visualization 2: Creative SVG Art (bouncy ball)
   // -------------------------------
   const svg = document.getElementById("art");
 
+  const radius = 50;
+  let y = 150;
+  let v = 0;
+  const gravity = 0.6;
+  const bounce = 0.8; // energy loss on each bounce
+  const ground = 300 - radius; // svg height is 300
+
   const circle = document.createElementNS("http://www.w3.org/2000/svg", "circle");
   circle.setAttribute("cx", 150);
-  circle.setAttribute("cy", 150);
-  circle.setAttribute("r", 80);
+  circle.setAttribute("cy", y);
+  circle.setAttribute("r", radius);
   circle.setAttribute("fill", "#4CAF50");
-
   svg.appendChild(circle);
+
+  function animate() {
+    v += gravity;
+    y += v;
+
+    if (y > ground) {
+      y = ground;
+      v = -v * bounce;
+    }
+
+    circle.setAttribute("cy", y);
+    requestAnimationFrame(animate);
+  }
+
+  animate();
+
+  // Click anywhere on the SVG to make the ball jump
+  svg.addEventListener("click", () => {
+    v = -12;
+  });
 };
  
