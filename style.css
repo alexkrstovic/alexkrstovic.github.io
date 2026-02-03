@@ -8,45 +8,45 @@ body {
 }
 
 .container {
-  max-width: 900px;
+  max-width: 56rem; /* ~896px */
   margin: 0 auto;
-  padding: 0 20px;
+  padding: 0 1.25rem; /* 20px */
 }
 
 .site-header {
   background: #111;
   color: white;
-  padding: 30px 0;
+  padding: 2rem 0; /* 32px */
 }
 
 .site-header h1 {
-  margin: 0 0 5px;
+  margin: 0 0 0.3125rem; /* 5px */
 }
 
 .subtitle {
-  margin: 0 0 15px;
+  margin: 0 0 0.9375rem; /* 15px */
   color: #ccc;
 }
 
 .hero-intro {
-  max-width: 600px;
-  margin: 10px 0 15px;
+  max-width: 37.5rem; /* 600px */
+  margin: 0.625rem 0 0.9375rem; /* 10px 0 15px */
   color: #ddd;
-  font-size: 16px;
+  font-size: 1rem; /* 16px */
 }
 
 .profile-pic {
-  width: 120px;
-  height: 120px;
+  width: 7.5rem; /* 120px */
+  height: 7.5rem; /* 120px */
   object-fit: cover;
   border-radius: 50%;
-  margin-top: 15px;
-  border: 3px solid white;
+  margin-top: 0.9375rem; /* 15px */
+  border: 0.1875rem solid white; /* 3px */
 }
 
 .nav a {
   color: #fff;
-  margin-right: 15px;
+  margin-right: 0.9375rem; /* 15px */
   text-decoration: none;
   font-weight: bold;
 }
@@ -56,8 +56,8 @@ body {
 }
 
 .links {
-  margin-top: 10px;
-  font-size: 14px;
+  margin-top: 0.625rem; /* 10px */
+  font-size: 0.875rem; /* 14px */
   color: #ccc;
 }
 
@@ -67,25 +67,25 @@ body {
 }
 
 .dot {
-  margin: 0 6px;
+  margin: 0 0.375rem; /* 6px */
 }
 
 main {
-  padding: 40px 0;
+  padding: 2.5rem 0; /* 40px */
 }
 
 .card {
   background: white;
-  padding: 25px;
-  border-radius: 10px;
-  margin-bottom: 25px;
-  box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+  padding: 1.5625rem; /* 25px */
+  border-radius: 0.625rem; /* 10px */
+  margin-bottom: 1.5625rem; /* 25px */
+  box-shadow: 0 0.125rem 0.375rem rgba(0, 0, 0, 0.05); /* 2px 6px */
 }
 
 h2 {
   margin-top: 0;
-  border-bottom: 2px solid #eee;
-  padding-bottom: 6px;
+  border-bottom: 0.125rem solid #eee; /* 2px */
+  padding-bottom: 0.375rem; /* 6px */
 }
 
 .role-header {
@@ -96,12 +96,38 @@ h2 {
 
 .meta {
   color: #777;
-  font-size: 14px;
+  font-size: 0.875rem; /* 14px */
 }
 
 .footer {
   text-align: center;
-  padding: 20px 0;
-  font-size: 14px;
+  padding: 1.25rem 0; /* 20px */
+  font-size: 0.875rem; /* 14px */
   color: #777;
+}
+
+/* ---------- Responsive adjustments ---------- */
+@media (max-width: 48rem) {
+  .site-header {
+    text-align: center;
+  }
+
+  .profile-pic {
+    margin: 1rem auto 0;
+    display: block;
+  }
+
+  .role-header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .nav a {
+    display: inline-block;
+    margin: 0.5rem 0.75rem 0 0;
+  }
+
+  .container {
+    padding: 0 1rem;
+  }
 }
