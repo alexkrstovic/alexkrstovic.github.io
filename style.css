@@ -166,9 +166,3 @@ h2 {
     gap: 1rem;
   }
 }
-
-.viz-layout > svg {
-  max-width: 100%;
-  height: auto;
-  display: block;
-}
