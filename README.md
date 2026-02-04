@@ -34,9 +34,3 @@ Contains two interactive visualizations:
 2. **Interactive Bouncing Ball**  
    - A JavaScript animation demonstrating physics-based motion.
    - The green ball responds to gravity and user clicks.
-
----
-
-## Interaction
-- The layout adjusts to different screen sizes using responsive CSS.
-- The bouncing ball visualization reacts to mouse clicks.
