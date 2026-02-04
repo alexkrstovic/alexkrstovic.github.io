@@ -1,8 +1,6 @@
 window.onload = function () {
 
-  // -------------------------------
   // Visualization 1: Skills Bar Chart
-  // -------------------------------
   const chart = document.getElementById("chart");
 
   const skills = [
@@ -53,10 +51,7 @@ window.onload = function () {
     chart.appendChild(value);
   });
 
-
-  // -------------------------------
   // Visualization 2: Creative SVG Art (bouncy ball)
-  // -------------------------------
   const svg = document.getElementById("art");
 
   const radius = 50;

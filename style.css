@@ -106,7 +106,6 @@ h2 {
   color: #777;
 }
 
-/* ---------- Responsive adjustments ---------- */
 @media (max-width: 48rem) {
   .site-header {
     text-align: center;
@@ -132,7 +131,6 @@ h2 {
   }
 }
 
-/* ---------- Visualizations layout ---------- */
 .viz-layout {
   display: flex;
   gap: 2rem;
