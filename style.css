@@ -132,37 +132,39 @@ h2 {
   }
 }
 
-
+/* ---------- Visualizations layout ---------- */
 .viz-layout {
   display: flex;
   gap: 2rem;
   align-items: flex-start;
+  flex-wrap: nowrap;
 }
 
-
-.viz-layout > svg,
-.viz-text {
-  min-width: 0;
+.viz-layout svg {
+  flex: 0 0 auto;
 }
-
-
-.viz-layout > svg {
-  width: 100%;
-  max-width: 100%;
-  height: auto;
-  display: block; 
-  flex: 1 1 0;
-}
-
 
 .viz-text {
-  flex: 1 1 0;
+  flex: 1;
+  max-width: 22rem;
+  font-size: 0.95rem;
+  line-height: 1.6;
 }
 
 
-@media (max-width: 600px) {
+@media (max-width: 60rem) {
   .viz-layout {
     flex-direction: column;
-    gap: 1rem;
+    align-items: flex-start;
+  }
+
+  .viz-layout svg {
+    margin-bottom: 1rem;
+  }
+
+  .viz-text {
+    max-width: 100%;
   }
 }
+
+
