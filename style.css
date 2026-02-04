@@ -167,4 +167,36 @@ h2 {
   }
 }
 
+.viz-layout {
+  display: flex;
+  gap: 2rem;
+  align-items: flex-start;
+}
 
+
+.viz-layout > svg,
+.viz-text {
+  min-width: 0;
+}
+
+
+.viz-layout > svg {
+  width: 100%;
+  max-width: 100%;
+  height: auto;
+  display: block; 
+  flex: 1 1 0;
+}
+
+
+.viz-text {
+  flex: 1 1 0;
+}
+
+
+@media (max-width: 600px) {
+  .viz-layout {
+    flex-direction: column;
+    gap: 1rem;
+  }
+}
