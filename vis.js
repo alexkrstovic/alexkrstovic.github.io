@@ -103,7 +103,9 @@ function initAssignment3VegaLite() {
   const vis2bEl = document.getElementById("vis2b");
   const vis3aEl = document.getElementById("vis3a");
   const vis3bEl = document.getElementById("vis3b");
-  if (!vis1aEl && !vis1bEl && !vis2aEl && !vis2bEl && !vis3aEl && !vis3bEl) return;
+  const vis4aEl = document.getElementById("vis4a");
+  const vis4bEl = document.getElementById("vis4b");
+  if (!vis1aEl && !vis1bEl && !vis2aEl && !vis2bEl && !vis3aEl && !vis3bEl && !vis4aEl && !vis4bEl) return;
 
   // If the page didn't load Vega scripts, don't crash—just log.
   if (typeof vegaEmbed === "undefined") {
@@ -211,7 +213,7 @@ function initAssignment3VegaLite() {
   // =========================================================
 
   // Common filter for valid years (keeps the chart clean)
-  const yearFilter = "isValid(datum.Year) && datum.Year >= 1980";
+  const yearFilter = "isValid(datum.Year) && datum.Year >= 1995";
 
   // -----------------------------
   // Visualization 2 (Q1): Top 5 Platforms — sales over time
@@ -224,15 +226,7 @@ function initAssignment3VegaLite() {
     data: { url: "dataset/videogames_wide.csv" },
     transform: [
       { filter: yearFilter },
-      {
-        joinaggregate: [{ op: "sum", field: "Global_Sales", as: "platform_total" }],
-        groupby: ["Platform"]
-      },
-      {
-        window: [{ op: "rank", as: "platform_rank" }],
-        sort: [{ field: "platform_total", order: "descending" }]
-      },
-      { filter: "datum.platform_rank <= 5" },
+      { filter: { field: "Platform", oneOf: topPlatforms } },
       {
         aggregate: [{ op: "sum", field: "Global_Sales", as: "year_sales" }],
         groupby: ["Year", "Platform"]
@@ -244,7 +238,7 @@ function initAssignment3VegaLite() {
         field: "Year",
         type: "quantitative",
         title: "Year",
-        axis: { format: "d" }
+        axis: { format: "d", tickCount: 6, labelAngle: 0 }
       },
       y: {
         field: "year_sales",
@@ -264,6 +258,9 @@ function initAssignment3VegaLite() {
     }
   };
 
+  // Top 5 genres based on overall popularity in the dataset (kept explicit for stability)
+  const topGenres = ["Action", "Sports", "Shooter", "Role-Playing", "Platform"];
+
   // -----------------------------
   // Visualization 2 (Q2): Top 5 Genres — sales over time
   // -----------------------------
@@ -275,15 +272,7 @@ function initAssignment3VegaLite() {
     data: { url: "dataset/videogames_wide.csv" },
     transform: [
       { filter: yearFilter },
-      {
-        joinaggregate: [{ op: "sum", field: "Global_Sales", as: "genre_total" }],
-        groupby: ["Genre"]
-      },
-      {
-        window: [{ op: "rank", as: "genre_rank" }],
-        sort: [{ field: "genre_total", order: "descending" }]
-      },
-      { filter: "datum.genre_rank <= 5" },
+      { filter: { field: "Genre", oneOf: topGenres } },
       {
         aggregate: [{ op: "sum", field: "Global_Sales", as: "year_sales" }],
         groupby: ["Year", "Genre"]
@@ -295,7 +284,7 @@ function initAssignment3VegaLite() {
         field: "Year",
         type: "quantitative",
         title: "Year",
-        axis: { format: "d" }
+        axis: { format: "d", tickCount: 6, labelAngle: 0 }
       },
       y: {
         field: "year_sales",
@@ -415,6 +404,78 @@ function initAssignment3VegaLite() {
 
   if (vis3aEl) vegaEmbed("#vis3a", vis3aSpec, { actions: false });
   if (vis3bEl) vegaEmbed("#vis3b", vis3bSpec, { actions: false });
+
+  // =========================================================
+  // Visualization 4: Nintendo vs Other Platforms (Visual Story)
+  // - vis4a: Line chart — total sales over time (Nintendo vs Other)
+  // - vis4b: Stacked area — share over time (Nintendo vs Other)
+  // Nintendo platforms: NES, SNES, N64, GB, GBA, DS, Wii, WiiU
+  // =========================================================
+
+  const nintendoPlatforms = ["NES", "SNES", "N64", "GB", "GBA", "DS", "Wii", "WiiU"];
+
+  const vis4aSpec = {
+    $schema: "https://vega.github.io/schema/vega-lite/v5.json",
+    description: "Nintendo vs Other — global sales over time",
+    width: "container",
+    height: 340,
+    data: { url: "dataset/videogames_wide.csv" },
+    transform: [
+      { filter: "isValid(datum.Year) && datum.Year >= 1980" },
+      {
+        calculate: `indexof(${JSON.stringify(["NES","SNES","N64","GB","GBA","DS","Wii","WiiU"])}, datum.Platform) >= 0 ? 'Nintendo' : 'Other'`,
+        as: "PlatformGroup"
+      },
+      {
+        aggregate: [{ op: "sum", field: "Global_Sales", as: "year_sales" }],
+        groupby: ["Year", "PlatformGroup"]
+      }
+    ],
+    mark: { type: "line", point: false },
+    encoding: {
+      x: { field: "Year", type: "quantitative", title: "Year", axis: { format: "d" } },
+      y: { field: "year_sales", type: "quantitative", title: "Global Sales (millions)" },
+      color: { field: "PlatformGroup", type: "nominal", title: "Group" },
+      tooltip: [
+        { field: "Year", type: "quantitative", title: "Year", format: "d" },
+        { field: "PlatformGroup", type: "nominal", title: "Group" },
+        { field: "year_sales", type: "quantitative", title: "Sales (M)", format: ".2f" }
+      ]
+    }
+  };
+
+  const vis4bSpec = {
+    $schema: "https://vega.github.io/schema/vega-lite/v5.json",
+    description: "Nintendo vs Other — stacked share over time",
+    width: "container",
+    height: 340,
+    data: { url: "dataset/videogames_wide.csv" },
+    transform: [
+      { filter: "isValid(datum.Year) && datum.Year >= 1980" },
+      {
+        calculate: `indexof(${JSON.stringify(["NES","SNES","N64","GB","GBA","DS","Wii","WiiU"])}, datum.Platform) >= 0 ? 'Nintendo' : 'Other'`,
+        as: "PlatformGroup"
+      },
+      {
+        aggregate: [{ op: "sum", field: "Global_Sales", as: "year_sales" }],
+        groupby: ["Year", "PlatformGroup"]
+      }
+    ],
+    mark: { type: "area", interpolate: "monotone" },
+    encoding: {
+      x: { field: "Year", type: "quantitative", title: "Year", axis: { format: "d" } },
+      y: { field: "year_sales", type: "quantitative", stack: "zero", title: "Global Sales (millions)" },
+      color: { field: "PlatformGroup", type: "nominal", title: "Group" },
+      tooltip: [
+        { field: "Year", type: "quantitative", title: "Year", format: "d" },
+        { field: "PlatformGroup", type: "nominal", title: "Group" },
+        { field: "year_sales", type: "quantitative", title: "Sales (M)", format: ".2f" }
+      ]
+    }
+  };
+
+  if (vis4aEl) vegaEmbed("#vis4a", vis4aSpec, { actions: false });
+  if (vis4bEl) vegaEmbed("#vis4b", vis4bSpec, { actions: false });
 }
 
 window.addEventListener("DOMContentLoaded", () => {
