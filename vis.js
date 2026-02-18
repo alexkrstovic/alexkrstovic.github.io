@@ -223,7 +223,7 @@ function initAssignment3VegaLite() {
   // - vis2b: Multi-line chart for top 5 Genres over time
   // =========================================================
 
-  // Common filter for valid years (keeps the chart clean)
+  // Common filter for valid years 
   const yearFilter = "isValid(datum.Year) && datum.Year >= 1995";
 
   // -----------------------------
@@ -285,7 +285,7 @@ function initAssignment3VegaLite() {
     }
   };
 
-  // Top 5 genres based on overall popularity in the dataset (kept explicit for stability)
+  // Top 5 genres based on overall popularity in the dataset 
   const topGenres = ["Action", "Sports", "Shooter", "Role-Playing", "Platform"];
 
   // -----------------------------
@@ -342,7 +342,7 @@ function initAssignment3VegaLite() {
   // =========================================================
 
   // Platforms shown in Visualization 3 (regional sales comparison)
-  // Note: Platforms will only appear if they exist in the dataset.
+
   const topPlatforms8 = ["PS2", "X360", "PS3", "Wii", "DS", "PS", "GBA", "PSP", "PS4", "PS5", "Switch"];
   const vis3aSpec = {
     $schema: "https://vega.github.io/schema/vega-lite/v5.json",
