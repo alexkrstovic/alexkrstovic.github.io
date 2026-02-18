@@ -160,16 +160,27 @@ function initAssignment3VegaLite() {
 
   const vis1bSpec = {
     $schema: "https://vega.github.io/schema/vega-lite/v5.json",
-    description: "Global sales distributed across genres for top platforms (stacked)",
+    description: "Global sales distributed across genres by ecosystem (Sony vs Microsoft vs Nintendo vs PC)",
     width: "container",
     height: 360,
     data: { url: "dataset/videogames_wide.csv" },
     transform: [
-      { filter: { field: "Platform", oneOf: topPlatforms } },
+      // Map Platform -> Ecosystem label (kept explicit to avoid JS variable conflicts)
+      {
+        calculate: "indexof(['PS','PS2','PS3','PS4','PSP','PSV'], datum.Platform) >= 0 ? 'Sony (PlayStation)' : indexof(['XB','X360','XOne'], datum.Platform) >= 0 ? 'Microsoft (Xbox)' : indexof(['NES','SNES','N64','GC','Wii','WiiU','GB','GBA','DS','3DS','Switch'], datum.Platform) >= 0 ? 'Nintendo' : datum.Platform == 'PC' ? 'PC' : 'Other'",
+        as: "Ecosystem"
+      },
+
+      // Keep only the 4 intended ecosystems
+      { filter: { field: "Ecosystem", oneOf: ["Sony (PlayStation)", "Microsoft (Xbox)", "Nintendo", "PC"] } },
+
+      // Aggregate sales by Genre x Ecosystem
       {
         aggregate: [{ op: "sum", field: "Global_Sales", as: "total_sales" }],
-        groupby: ["Genre", "Platform"]
+        groupby: ["Genre", "Ecosystem"]
       },
+
+      // Compute total sales per genre (for consistent sorting)
       {
         joinaggregate: [{ op: "sum", field: "total_sales", as: "genre_total" }],
         groupby: ["Genre"]
@@ -190,13 +201,13 @@ function initAssignment3VegaLite() {
         title: "Total Global Sales (millions)"
       },
       color: {
-        field: "Platform",
+        field: "Ecosystem",
         type: "nominal",
-        title: "Platform"
+        title: "Platform Ecosystem"
       },
       tooltip: [
         { field: "Genre", type: "nominal" },
-        { field: "Platform", type: "nominal" },
+        { field: "Ecosystem", type: "nominal", title: "Ecosystem" },
         { field: "total_sales", type: "quantitative", title: "Sales (M)", format: ".2f" }
       ]
     }
@@ -220,16 +231,32 @@ function initAssignment3VegaLite() {
   // -----------------------------
   const vis2aSpec = {
     $schema: "https://vega.github.io/schema/vega-lite/v5.json",
-    description: "Global sales over time for top 5 platforms",
+    description: "Global sales over time by manufacturer (Sony vs Microsoft vs Nintendo vs PC)",
     width: "container",
     height: 320,
     data: { url: "dataset/videogames_wide.csv" },
     transform: [
       { filter: yearFilter },
-      { filter: { field: "Platform", oneOf: topPlatforms } },
+      // Map Platform -> Manufacturer (ecosystem)
+      {
+        calculate:
+          "indexof(['PS','PS2','PS3','PS4','PSP','PSV'], datum.Platform) >= 0 ? 'Sony (PlayStation)' : " +
+          "indexof(['XB','X360','XOne'], datum.Platform) >= 0 ? 'Microsoft (Xbox)' : " +
+          "indexof(['NES','SNES','N64','GC','Wii','WiiU','GB','GBA','DS','3DS','Switch'], datum.Platform) >= 0 ? 'Nintendo' : " +
+          "datum.Platform == 'PC' ? 'PC' : 'Other'",
+        as: "Manufacturer"
+      },
+      // Keep only the intended manufacturer groups
+      {
+        filter: {
+          field: "Manufacturer",
+          oneOf: ["Sony (PlayStation)", "Microsoft (Xbox)", "Nintendo", "PC"]
+        }
+      },
+      // Sum sales by Year + Manufacturer
       {
         aggregate: [{ op: "sum", field: "Global_Sales", as: "year_sales" }],
-        groupby: ["Year", "Platform"]
+        groupby: ["Year", "Manufacturer"]
       }
     ],
     mark: { type: "line", point: false },
@@ -246,13 +273,13 @@ function initAssignment3VegaLite() {
         title: "Global Sales (millions)"
       },
       color: {
-        field: "Platform",
+        field: "Manufacturer",
         type: "nominal",
-        title: "Platform"
+        title: "Manufacturer"
       },
       tooltip: [
         { field: "Year", type: "quantitative", title: "Year", format: "d" },
-        { field: "Platform", type: "nominal" },
+        { field: "Manufacturer", type: "nominal", title: "Manufacturer" },
         { field: "year_sales", type: "quantitative", title: "Sales (M)", format: ".2f" }
       ]
     }
@@ -314,7 +341,9 @@ function initAssignment3VegaLite() {
   // Top 8 platforms based on total global sales
   // =========================================================
 
-  const topPlatforms8 = ["PS2", "X360", "PS3", "Wii", "DS", "PS", "GBA", "PSP"];
+  // Platforms shown in Visualization 3 (regional sales comparison)
+  // Note: Platforms will only appear if they exist in the dataset.
+  const topPlatforms8 = ["PS2", "X360", "PS3", "Wii", "DS", "PS", "GBA", "PSP", "PS4", "PS5", "Switch"];
   const vis3aSpec = {
     $schema: "https://vega.github.io/schema/vega-lite/v5.json",
     description: "Regional sales comparison by platform (grouped)",
@@ -338,7 +367,7 @@ function initAssignment3VegaLite() {
         field: "Platform",
         type: "nominal",
         title: "Platform",
-        axis: { labelAngle: -30 }
+        axis: { labelAngle: -45, labelOverlap: true }
       },
       y: {
         field: "regional_sales",
@@ -382,7 +411,7 @@ function initAssignment3VegaLite() {
         field: "Platform",
         type: "nominal",
         title: "Platform",
-        axis: { labelAngle: -30 }
+        axis: { labelAngle: -45, labelOverlap: true }
       },
       y: {
         field: "regional_sales",
@@ -409,10 +438,10 @@ function initAssignment3VegaLite() {
   // Visualization 4: Nintendo vs Other Platforms (Visual Story)
   // - vis4a: Line chart — total sales over time (Nintendo vs Other)
   // - vis4b: Stacked area — share over time (Nintendo vs Other)
-  // Nintendo platforms: NES, SNES, N64, GB, GBA, DS, Wii, WiiU
+  // Nintendo platforms: NES, SNES, N64, GB, GBA, DS, 3DS, Wii, WiiU, Switch
   // =========================================================
 
-  const nintendoPlatforms = ["NES", "SNES", "N64", "GB", "GBA", "DS", "Wii", "WiiU"];
+  const nintendoPlatforms = ["NES", "SNES", "N64", "GB", "GBA", "DS", "3DS", "Wii", "WiiU", "Switch"];
 
   const vis4aSpec = {
     $schema: "https://vega.github.io/schema/vega-lite/v5.json",
@@ -423,7 +452,7 @@ function initAssignment3VegaLite() {
     transform: [
       { filter: "isValid(datum.Year) && datum.Year >= 1980" },
       {
-        calculate: `indexof(${JSON.stringify(["NES","SNES","N64","GB","GBA","DS","Wii","WiiU"])}, datum.Platform) >= 0 ? 'Nintendo' : 'Other'`,
+        calculate: `indexof(${JSON.stringify(nintendoPlatforms)}, datum.Platform) >= 0 ? 'Nintendo' : 'Other'`,
         as: "PlatformGroup"
       },
       {
@@ -435,7 +464,15 @@ function initAssignment3VegaLite() {
     encoding: {
       x: { field: "Year", type: "quantitative", title: "Year", axis: { format: "d" } },
       y: { field: "year_sales", type: "quantitative", title: "Global Sales (millions)" },
-      color: { field: "PlatformGroup", type: "nominal", title: "Group" },
+      color: {
+        field: "PlatformGroup",
+        type: "nominal",
+        title: "Group",
+        scale: {
+          domain: ["Nintendo", "Other"],
+          range: ["#d62728", "#1f77b4"]
+        }
+      },
       tooltip: [
         { field: "Year", type: "quantitative", title: "Year", format: "d" },
         { field: "PlatformGroup", type: "nominal", title: "Group" },
@@ -453,7 +490,7 @@ function initAssignment3VegaLite() {
     transform: [
       { filter: "isValid(datum.Year) && datum.Year >= 1980" },
       {
-        calculate: `indexof(${JSON.stringify(["NES","SNES","N64","GB","GBA","DS","Wii","WiiU"])}, datum.Platform) >= 0 ? 'Nintendo' : 'Other'`,
+        calculate: `indexof(${JSON.stringify(nintendoPlatforms)}, datum.Platform) >= 0 ? 'Nintendo' : 'Other'`,
         as: "PlatformGroup"
       },
       {
@@ -465,7 +502,15 @@ function initAssignment3VegaLite() {
     encoding: {
       x: { field: "Year", type: "quantitative", title: "Year", axis: { format: "d" } },
       y: { field: "year_sales", type: "quantitative", stack: "zero", title: "Global Sales (millions)" },
-      color: { field: "PlatformGroup", type: "nominal", title: "Group" },
+      color: {
+        field: "PlatformGroup",
+        type: "nominal",
+        title: "Group",
+        scale: {
+          domain: ["Nintendo", "Other"],
+          range: ["#d62728", "#1f77b4"]
+        }
+      },
       tooltip: [
         { field: "Year", type: "quantitative", title: "Year", format: "d" },
         { field: "PlatformGroup", type: "nominal", title: "Group" },

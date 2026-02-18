@@ -138,7 +138,6 @@ h2 {
   flex-wrap: nowrap;
 }
 
-/* Give the Vega chart container a width so it can render */
 .viz-layout > div:first-child {
   flex: 1;
   min-width: 0;
